@@ -1,31 +1,56 @@
-# 問卷回饋系統
+# Feedback Sheet Generator
 
-## 專案說明
-這是一個 Google Apps Script 專案，用於自動處理問卷回饋資料。此腳本可以根據不同講者自動產生個別的回饋試算表。
+A Google Apps Script project that helps process and analyze participant feedback for educational events.
+
+## Features
+
+1. **Create Individual Feedback Sheets**
+   - Generates separate spreadsheets for each speaker
+   - Organizes participant feedback in a structured format
+   - Maintains participant anonymity for certain feedback types
+
+2. **NPS (Net Promoter Score) Processing**
+   - Calculates NPS for each speaker
+   - Generates personalized feedback messages
+   - Updates processing status automatically
+
+3. **Duplicate Feedback Detection**
+   - Identifies duplicate feedback entries
+   - Reports duplicate locations by row numbers
+   - Processes all speakers' feedback sheets automatically
+
+## How to Use
+
+1. Run `executeCreateFeedbackSheets()` to generate individual feedback sheets
+2. Run `executeNPSProcess()` to process NPS data
+3. Run `executeCheckDuplicateFeedback()` to check for duplicate feedback
+
+---
+
+# 回饋表產生器
+
+這是一個用於處理和分析教育活動參與者回饋的 Google Apps Script 專案。
 
 ## 功能
-- 自動從主要問卷回應表格中擷取資料
-- 為每位講者建立獨立的回饋試算表
-- 自動整理回饋內容，包含：
-  - 教師基本資料
-  - 講者分享內容的收穫程度
-  - 給講者的建議或心得
-- 自動產生所有新建試算表的連結清單
 
-## 使用方法
-1. 在 Google Sheets 中開啟問卷回應試算表
-2. 從選單中選擇「工具」>「指令碼編輯器」
-3. 將 `createFeedbackSheets.gs` 的程式碼複製到編輯器中
-4. 儲存專案
-5. 執行 `createFeedbackSheets` 函式
-6. 首次執行時需要授權存取 Google Sheets
+1. **建立個別回饋表**
+   - 為每位講者產生獨立的試算表
+   - 以結構化格式整理參與者回饋
+   - 對特定類型的回饋維持參與者匿名性
 
-## 資料格式需求
-問卷回應表格必須符合以下格式：
-- 第1欄：教師姓名
-- 第2欄：學校
-- 第3欄：縣市
-- 第4欄：講者姓名
-- 第5欄：收穫程度
-- 第6欄之後：講者回饋欄位
+2. **NPS（淨推薦值）處理**
+   - 計算每位講者的 NPS
+   - 產生個人化的回饋訊息
+   - 自動更新處理狀態
+
+3. **重複回饋檢查**
+   - 識別重複的回饋內容
+   - 以列數標示重複位置
+   - 自動處理所有講者的回饋表
+
+## 使用方式
+
+1. 執行 `executeCreateFeedbackSheets()` 以產生個別回饋表
+2. 執行 `executeNPSProcess()` 以處理 NPS 資料
+3. 執行 `executeCheckDuplicateFeedback()` 以檢查重複回饋
 
