@@ -36,22 +36,46 @@ function createFeedbackSheets() {
     ];
     newSs.appendRow(newHeaders);
 
-    // 將篩選的資料填入新試算表
     let rowCount = 0;
+    let feedbackCount = {
+      "收穫度Max，整天這場是我心中NO1": 0,
+      "學到非常多新東西": 0,
+      "有學到新東西": 0,
+      "普通": 0,
+      "沒有學到新東西": 0
+    };
+
+    // 將篩選的資料填入新試算表
     filteredData.slice(1).forEach(row => {
-      const newRow = [
-        row[0], // 您的姓名 → 教師姓名
-        row[2], // 縣市 → 來自學校
-        row[1], // 學校 → 縣市
-        row[4], // 教學導入Round1-1
-        row[speakerIndex] // 給該講者的回饋內容
-      ];
+      let teacherName = row[0];
+      let school = row[1];
+      const feedback = row[4]; // 教學導入Round1-1
+      const suggestion = row[speakerIndex]; // 給該講者的回饋內容
+
+      // 修改教師姓名和學校資料，若回饋為「普通」或「沒有學到新東西」
+      if (feedback === "普通" || feedback === "沒有學到新東西") {
+        teacherName = "○○○";
+        school = "○○○○";
+      }
+
+      // 統計各種回饋的數量
+      if (feedbackCount.hasOwnProperty(feedback)) {
+        feedbackCount[feedback]++;
+      }
+
+      const newRow = [teacherName, school, row[2], feedback, suggestion];
       newSs.appendRow(newRow);
       rowCount++;
     });
 
     // 打印分別建立了幾列資料
     Logger.log(`為講者 ${speaker} 建立了 ${rowCount} 列資料（不含標題列）`);
+
+    // 打印統計數據
+    Logger.log(`講者 ${speaker} 的收穫度統計：`);
+    for (const [key, value] of Object.entries(feedbackCount)) {
+      Logger.log(`${key}: ${value}`);
+    }
 
     // 凍結第一列和前三欄
     newSs.setFrozenRows(1);
