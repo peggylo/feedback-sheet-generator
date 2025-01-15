@@ -16,6 +16,7 @@ function processNPSData() {
     
     // 找到所需欄位的索引
     const npsColumnIndex = headers.indexOf("NPS") + 1;
+    const statusColumnIndex = headers.indexOf("status") + 1;
     const maxColumnIndex = headers.indexOf("收穫度Max，整天這場是我心中NO1") + 1;
     const learnedLotsColumnIndex = headers.indexOf("學到非常多新東西") + 1;
     const normalColumnIndex = headers.indexOf("普通") + 1;
@@ -24,6 +25,9 @@ function processNPSData() {
     
     if (npsColumnIndex === 0) {
       throw new Error('找不到 NPS 欄位');
+    }
+    if (statusColumnIndex === 0) {
+      throw new Error('找不到 status 欄位');
     }
     
     // 處理簡志祥的資料（第 2 列）
@@ -42,6 +46,20 @@ function processNPSData() {
     const promotersPercent = Math.round((promotersCount / total) * 100 * 10) / 10; // 四捨五入到小數點一位
     const detractorsPercent = Math.round((detractorsCount / total) * 100 * 10) / 10;
     const npsScore = Math.round(promotersPercent - detractorsPercent);
+    
+    // 取得 feedback sheet 中的 NPS 值進行比對
+    const feedbackNPS = feedbackSheet.getRange(row, npsColumnIndex).getValue();
+    
+    // 比對計算出的 NPS 和 feedback sheet 中的 NPS
+    let status = '';
+    if (npsScore === feedbackNPS) {
+      status = 'done';
+    } else {
+      status = `計算值(${npsScore}) 與 表格值(${feedbackNPS}) 不符`;
+    }
+    
+    // 更新 status 欄位
+    feedbackSheet.getRange(row, statusColumnIndex).setValue(status);
     
     // 開啟講者的 spreadsheet
     const speakerSS = SpreadsheetApp.openByUrl(speakerSpreadsheetUrl);
@@ -67,7 +85,7 @@ function processNPSData() {
     // 填入回饋文字
     newSheet.getRange("A6").setValue(messageTemplate);
     
-    Logger.log(`已完成處理 ${speakerName} 的 NPS 資料`);
+    Logger.log(`已完成處理 ${speakerName} 的 NPS 資料，狀態：${status}`);
   } catch (error) {
     Logger.log('處理 NPS 資料時發生錯誤：' + error.toString());
     throw error;
