@@ -145,8 +145,8 @@ function createFeedbackSheets() {
       feedbackCount["普通"],
       feedbackCount["沒有學到新東西"],
       Object.values(feedbackCount).reduce((sum, count) => sum + count, 0),
-      // 計算 NPS
-      calculateNPS(feedbackCount)
+      calculateAverage(feedbackCount),  // 新增：平均分數
+      calculateNPS(feedbackCount)       // NPS 移到最後一欄（J欄）
     ];
     
     // 在最後一列之後新增資料
@@ -182,4 +182,20 @@ function calculateNPS(feedbackCount) {
   
   // NPS = 推廣者百分比 - 貶低者百分比
   return Math.round(promotersPercent - detractorsPercent);
+}
+
+function calculateAverage(feedbackCount) {
+  const total = Object.values(feedbackCount).reduce((sum, count) => sum + count, 0);
+  if (total === 0) return 0;
+
+  // 計算總分
+  const totalScore = 
+    feedbackCount["收穫度Max，整天這場是我心中NO1"] * 5 +  // 5分
+    feedbackCount["學到非常多新東西"] * 4 +                 // 4分
+    feedbackCount["有學到新東西"] * 3 +                     // 3分
+    feedbackCount["普通"] * 2 +                             // 2分
+    feedbackCount["沒有學到新東西"] * 1;                    // 1分
+
+  // 計算平均分數並四捨五入到整數
+  return Math.round((totalScore / total) * 100) / 100;  // 保留兩位小數
 }
