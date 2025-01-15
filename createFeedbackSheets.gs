@@ -88,11 +88,22 @@ function createFeedbackSheets() {
       return feedbackOrder.indexOf(a[3]) - feedbackOrder.indexOf(b[3]);
     });
 
+    // 將排序後的資料填入新試算表
     let rowCount = 0;
     feedbackRows.forEach(row => {
       newSs.appendRow(row);
       rowCount++;
     });
+
+    // 設定所有儲存格的格式
+    const allRange = newSs.getRange(1, 1, rowCount + 1, 5);  // +1 是因為包含標題列
+    
+    // 設定垂直置中
+    allRange.setVerticalAlignment("middle");
+    
+    // 設定前四欄水平置中
+    const centerRange = newSs.getRange(1, 1, rowCount + 1, 4);
+    centerRange.setHorizontalAlignment("center");
 
     Logger.log(`為講者 ${speaker} 建立了 ${rowCount} 列資料（不含標題列）`);
 
