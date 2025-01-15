@@ -18,6 +18,9 @@ function createFeedbackSheets() {
 
     if (filteredData.length <= 1) return; // 如果沒有有效資料列，略過
 
+    // 取得講師名稱的後兩個字 + 老師
+    const speakerDisplayName = speaker.slice(-2) + "老師";
+
     // 新試算表名稱
     const newSheetName = `2024 教學創新 AI DAY 問卷回饋--${speaker}`;
     const newSheet = SpreadsheetApp.create(newSheetName);
@@ -31,8 +34,8 @@ function createFeedbackSheets() {
       "教師姓名",
       "來自學校", // 第二欄
       "縣市",     // 第三欄
-      `【${speaker}】分享給你的收穫程度(選項:收穫度Max,學到很多,有學到,普通,沒學到新東西)`,
-      `給講者【${speaker}】分享內容的建議或心得`
+      `【${speakerDisplayName}】分享給你的收穫程度(選項:收穫度Max,學到很多,有學到,普通,沒學到新東西)`,
+      `給講者【${speakerDisplayName}】分享內容的建議或心得`
     ];
     newSs.appendRow(newHeaders);
 
