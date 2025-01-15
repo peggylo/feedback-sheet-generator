@@ -143,7 +143,9 @@ function createFeedbackSheets() {
       feedbackCount["學到非常多新東西"],
       feedbackCount["有學到新東西"],
       feedbackCount["普通"],
-      feedbackCount["沒有學到新東西"]
+      feedbackCount["沒有學到新東西"],
+      // 加入總和
+      Object.values(feedbackCount).reduce((sum, count) => sum + count, 0)
     ];
     
     // 在最後一列之後新增資料
