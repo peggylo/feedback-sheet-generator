@@ -130,6 +130,25 @@ function createFeedbackSheets() {
     }
 
     const newSheetUrl = newSheet.getUrl();
+
+    // 將資訊填入 feedback 分頁
+    const feedbackSheet = ss.getSheetByName("feedback");
+    const feedbackLastRow = feedbackSheet.getLastRow();  // 改名避免變數重複宣告
+    
+    // 準備要填入的資料
+    const feedbackData = [
+      speaker,  // 講者姓名
+      newSheetUrl,  // 試算表網址
+      feedbackCount["收穫度Max，整天這場是我心中NO1"],
+      feedbackCount["學到非常多新東西"],
+      feedbackCount["有學到新東西"],
+      feedbackCount["普通"],
+      feedbackCount["沒有學到新東西"]
+    ];
+    
+    // 在最後一列之後新增資料
+    feedbackSheet.getRange(feedbackLastRow + 1, 1, 1, feedbackData.length).setValues([feedbackData]);
+
     urls.push([newSheetName, newSheetUrl]);
   });
 
