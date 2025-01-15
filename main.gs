@@ -20,4 +20,16 @@ function executeNPSProcess() {
   } catch (error) {
     Logger.log('執行 NPS 處理時發生錯誤：' + error.toString());
   }
+}
+
+/**
+ * 執行檢查重複回饋的功能
+ */
+function executeCheckDuplicateFeedback() {
+  try {
+    checkDuplicateFeedback();
+    Logger.log('重複回饋檢查完成');
+  } catch (error) {
+    Logger.log('執行重複回饋檢查時發生錯誤：' + error.toString());
+  }
 } 
