@@ -41,11 +41,11 @@ function createFeedbackSheets() {
     newSs.appendRow(newHeaders);
 
     // 設定欄寬
-    newSs.setColumnWidth(1, 100);  // 教師姓名：約4個中文字寬
-    newSs.setColumnWidth(2, 200);  // 來自學校：較寬以容納學校名稱
-    newSs.setColumnWidth(3, 100);  // 縣市：約4個中文字寬
-    newSs.setColumnWidth(4, 200);  // 分享給你的收穫程度
-    newSs.setColumnWidth(5, 400);  // 建議或心得：收穫程度欄的兩倍寬
+    newSs.setColumnWidth(1, 90);   // 教師姓名：約3.5個中文字寬 (原本100)
+    newSs.setColumnWidth(2, 200);  // 來自學校：保持不變
+    newSs.setColumnWidth(3, 90);   // 縣市：約3.5個中文字寬 (原本100)
+    newSs.setColumnWidth(4, 230);  // 分享給你的收穫程度：增加一個中文字寬度 (原本200)
+    newSs.setColumnWidth(5, 400);  // 建議或心得：保持不變
 
     // 設定第一列標題格式
     const headerRange = newSs.getRange(1, 1, 1, 5);
