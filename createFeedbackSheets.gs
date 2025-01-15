@@ -157,11 +157,4 @@ function createFeedbackSheets() {
   urls.forEach(urlInfo => {
     Logger.log(`試算表名稱: ${urlInfo[0]} | 試算表網址: ${urlInfo[1]}`);
   });
-
-  const urlSheet = ss.getSheetByName("生成試算表網址") || ss.insertSheet("生成試算表網址");
-  urlSheet.clear();
-  urlSheet.appendRow(["試算表名稱", "試算表網址"]);
-  urls.forEach(urlInfo => {
-    urlSheet.appendRow(urlInfo);
-  });
 }
