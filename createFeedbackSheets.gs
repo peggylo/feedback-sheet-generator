@@ -136,17 +136,23 @@ function createFeedbackSheets() {
     const feedbackLastRow = feedbackSheet.getLastRow();  // 改名避免變數重複宣告
     
     // 準備要填入的資料
+    const total = Object.values(feedbackCount).reduce((sum, count) => sum + count, 0);
     const feedbackData = [
-      speaker,  // 講者姓名
-      newSheetUrl,  // 試算表網址
-      feedbackCount["收穫度Max，整天這場是我心中NO1"],
-      feedbackCount["學到非常多新東西"],
-      feedbackCount["有學到新東西"],
-      feedbackCount["普通"],
-      feedbackCount["沒有學到新東西"],
-      Object.values(feedbackCount).reduce((sum, count) => sum + count, 0),
-      calculateAverage(feedbackCount),  // 新增：平均分數
-      calculateNPS(feedbackCount)       // NPS 移到最後一欄（J欄）
+      speaker,  // 講者姓名 (A欄)
+      newSheetUrl,  // 試算表網址 (B欄)
+      feedbackCount["收穫度Max，整天這場是我心中NO1"],  // C欄
+      calculatePercentage(feedbackCount["收穫度Max，整天這場是我心中NO1"], total),  // D欄
+      feedbackCount["學到非常多新東西"],  // E欄
+      calculatePercentage(feedbackCount["學到非常多新東西"], total),  // F欄
+      feedbackCount["有學到新東西"],  // G欄
+      calculatePercentage(feedbackCount["有學到新東西"], total),  // H欄
+      feedbackCount["普通"],  // I欄
+      calculatePercentage(feedbackCount["普通"], total),  // J欄
+      feedbackCount["沒有學到新東西"],  // K欄
+      calculatePercentage(feedbackCount["沒有學到新東西"], total),  // L欄
+      Object.values(feedbackCount).reduce((sum, count) => sum + count, 0),  // M欄：總人數
+      calculateAverage(feedbackCount),  // N欄：平均分數
+      calculateNPS(feedbackCount)  // O欄：NPS
     ];
     
     // 在最後一列之後新增資料
@@ -198,4 +204,11 @@ function calculateAverage(feedbackCount) {
 
   // 計算平均分數並四捨五入到整數
   return Math.round((totalScore / total) * 100) / 100;  // 保留兩位小數
+}
+
+// 修改計算百分比的函數
+function calculatePercentage(count, total) {
+  if (total === 0) return "0%";
+  // 計算百分比並四捨五入到整數，加上 % 符號
+  return Math.round((count / total) * 100) + "%";  // 會顯示為 "14%" 這樣的格式
 }
