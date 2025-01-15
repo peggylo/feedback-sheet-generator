@@ -144,8 +144,9 @@ function createFeedbackSheets() {
       feedbackCount["有學到新東西"],
       feedbackCount["普通"],
       feedbackCount["沒有學到新東西"],
-      // 加入總和
-      Object.values(feedbackCount).reduce((sum, count) => sum + count, 0)
+      Object.values(feedbackCount).reduce((sum, count) => sum + count, 0),
+      // 計算 NPS
+      calculateNPS(feedbackCount)
     ];
     
     // 在最後一列之後新增資料
@@ -157,4 +158,28 @@ function createFeedbackSheets() {
   urls.forEach(urlInfo => {
     Logger.log(`試算表名稱: ${urlInfo[0]} | 試算表網址: ${urlInfo[1]}`);
   });
+}
+
+// 新增 NPS 計算函數
+function calculateNPS(feedbackCount) {
+  const total = Object.values(feedbackCount).reduce((sum, count) => sum + count, 0);
+  if (total === 0) return 0;
+
+  // 推廣者：給 4-5 分的人數（收穫度Max 和 學到非常多）
+  const promoters = feedbackCount["收穫度Max，整天這場是我心中NO1"] + 
+                   feedbackCount["學到非常多新東西"];
+  
+  // 被動者：給 3 分的人數（有學到新東西）
+  const passives = feedbackCount["有學到新東西"];
+  
+  // 貶低者：給 1-2 分的人數（普通和沒學到）
+  const detractors = feedbackCount["普通"] + 
+                    feedbackCount["沒有學到新東西"];
+
+  // 計算百分比並四捨五入到整數
+  const promotersPercent = (promoters / total) * 100;
+  const detractorsPercent = (detractors / total) * 100;
+  
+  // NPS = 推廣者百分比 - 貶低者百分比
+  return Math.round(promotersPercent - detractorsPercent);
 }
