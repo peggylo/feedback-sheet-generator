@@ -6,6 +6,13 @@ function createFeedbackSheets() {
   const speakerNames = headers.slice(5); // 假設第6欄之後是講者的欄位
   
   const urls = []; // 用於儲存新試算表名稱和網址的陣列
+  const feedbackOrder = [
+    "收穫度Max，整天這場是我心中NO1",
+    "學到非常多新東西",
+    "有學到新東西",
+    "普通",
+    "沒有學到新東西"
+  ];
 
   speakerNames.forEach((speaker, index) => {
     if (!speaker) return; // 跳過空的講者欄位
@@ -39,7 +46,7 @@ function createFeedbackSheets() {
     ];
     newSs.appendRow(newHeaders);
 
-    let rowCount = 0;
+    let feedbackRows = [];
     let feedbackCount = {
       "收穫度Max，整天這場是我心中NO1": 0,
       "學到非常多新東西": 0,
@@ -48,10 +55,10 @@ function createFeedbackSheets() {
       "沒有學到新東西": 0
     };
 
-    // 將篩選的資料填入新試算表
     filteredData.slice(1).forEach(row => {
       let teacherName = row[0];
-      let school = row[1];
+      let school = row[2]; // 正確顯示學校資料
+      let city = row[1];   // 正確顯示縣市資料
       const feedback = row[4]; // 教學導入Round1-1
       const suggestion = row[speakerIndex]; // 給該講者的回饋內容
 
@@ -61,13 +68,23 @@ function createFeedbackSheets() {
         school = "○○○○";
       }
 
-      // 統計各種回饋的數量
+      // 統計回饋數量
       if (feedbackCount.hasOwnProperty(feedback)) {
         feedbackCount[feedback]++;
       }
 
-      const newRow = [teacherName, school, row[2], feedback, suggestion];
-      newSs.appendRow(newRow);
+      feedbackRows.push([teacherName, school, city, feedback, suggestion]);
+    });
+
+    // 根據 D 欄排序
+    feedbackRows.sort((a, b) => {
+      return feedbackOrder.indexOf(a[3]) - feedbackOrder.indexOf(b[3]);
+    });
+
+    // 將排序後的資料填入新試算表
+    let rowCount = 0;
+    feedbackRows.forEach(row => {
+      newSs.appendRow(row);
       rowCount++;
     });
 
