@@ -116,7 +116,7 @@ function processOneNPSData(feedbackSheet, npsTemplateSheet, rowData, row, column
     newSheet.getRange("A2").setValue(npsScore);
     
     // 填入回饋文字
-    const messageTemplate = `根據 AI DAY 參加者回饋，您的聽眾中高度推薦與認同者占 ${promotersPercent}%，NPS 為：${promotersPercent}% − ${detractorsPercent}% = ${npsScore}。多數參加者對您的分享推薦度極高，從 NPS 來看您的內容對參加者具有高度價值，真心感謝！\n\n（也說明，NPS 對主辦單位來說並不是在評價講者，比較是在理解聽眾需求、他們的疑問或期待有無被解決；衷心謝謝您準備了第一線老師們需要的內容！🙏）`;
+    const messageTemplate = `根據 AI DAY 參加者回饋，您的聽眾中高度推薦與認同者占 ${promotersPercent}%，NPS 為：${promotersPercent}% − ${detractorsPercent}% = ${npsScore}，是當天的 TOP 5 講者！大多數參加者對您的分享高度認同與推薦，從 NPS 來看您的內容對參加者具有高度價值，真心感謝！\n\n（也說明，NPS 對主辦單位來說並不是在評價講者，比較是在理解聽眾需求、他們的疑問或期待有無被解決；衷心謝謝您準備了第一線老師們需要的內容！🙏）`;
     
     newSheet.getRange("A6").setValue(messageTemplate);
   }
