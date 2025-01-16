@@ -32,4 +32,16 @@ function executeCheckDuplicateFeedback() {
   } catch (error) {
     Logger.log('執行重複回饋檢查時發生錯誤：' + error.toString());
   }
+}
+
+/**
+ * 執行設定講者試算表權限的功能
+ */
+function executeSetPermissions() {
+  try {
+    setViewerPermissions();
+    Logger.log('權限設定完成');
+  } catch (error) {
+    Logger.log('執行權限設定時發生錯誤：' + error.toString());
+  }
 } 
