@@ -33,8 +33,10 @@ function setViewerPermissions() {
       const currentRow = index + 2;
       const emails = row[emailColumnIndex - 1];
       const spreadsheetUrl = row[spreadsheetUrlColumnIndex - 1];
+      const emailCheck = row[emailCheckColumnIndex - 1];
       
-      if (emails && spreadsheetUrl) {
+      // 只處理 email check 為空白的資料
+      if (emailCheck === "" && emails && spreadsheetUrl) {
         try {
           Logger.log(`處理第 ${currentRow} 列的權限設定`);
           const result = setPermissionsForOneSheet(spreadsheetUrl, emails);
@@ -56,13 +58,13 @@ function setViewerPermissions() {
 }
 
 function setPermissionsForOneSheet(spreadsheetUrl, emailsString) {
-  // 如果 emails 是空的，直接返回
   if (!emailsString) {
     return "沒有 email 資料";
   }
 
   const emails = emailsString.split(';').map(email => email.trim());
   const ss = SpreadsheetApp.openByUrl(spreadsheetUrl);
+  const fileId = ss.getId();
   
   let successCount = 0;
   let failCount = 0;
@@ -72,7 +74,19 @@ function setPermissionsForOneSheet(spreadsheetUrl, emailsString) {
   emails.forEach(email => {
     if (email) {
       try {
-        ss.addViewer(email);
+        const resource = {
+          'role': 'reader',
+          'type': 'user',
+          'emailAddress': email
+        };
+        
+        const optionalArgs = {
+          'supportsAllDrives': true,
+          'sendNotificationEmail': false,  // 明確設定不發送通知
+          'fields': 'id'  // 只返回必要資訊
+        };
+        
+        Drive.Permissions.create(resource, fileId, optionalArgs);
         successCount++;
       } catch (error) {
         failCount++;
