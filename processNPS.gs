@@ -34,27 +34,30 @@ function processNPSData() {
     const dataRange = feedbackSheet.getRange(2, 1, feedbackSheet.getLastRow() - 1, feedbackSheet.getLastColumn());
     const data = dataRange.getValues();
 
-    // 處理每一位講者的資料
+    // 只處理 status 為空白的資料
     data.forEach((rowData, index) => {
       const currentRow = index + 2; // 實際的列數
-      try {
-        processOneNPSData(feedbackSheet, npsTemplateSheet, rowData, currentRow, {
-          nps: npsColumnIndex,
-          status: statusColumnIndex,
-          max: maxColumnIndex,
-          learnedLots: learnedLotsColumnIndex,
-          normal: normalColumnIndex,
-          noLearn: noLearnColumnIndex,
-          total: totalColumnIndex
-        });
-      } catch (error) {
-        Logger.log(`處理第 ${currentRow} 列資料時發生錯誤：${error.toString()}`);
-        // 更新狀態欄位顯示錯誤
-        feedbackSheet.getRange(currentRow, statusColumnIndex).setValue(`處理失敗：${error.toString()}`);
+      const status = rowData[statusColumnIndex - 1];
+      
+      if (status === "") { // 只處理 status 為空白的資料
+        try {
+          processOneNPSData(feedbackSheet, npsTemplateSheet, rowData, currentRow, {
+            nps: npsColumnIndex,
+            status: statusColumnIndex,
+            max: maxColumnIndex,
+            learnedLots: learnedLotsColumnIndex,
+            normal: normalColumnIndex,
+            noLearn: noLearnColumnIndex,
+            total: totalColumnIndex
+          });
+        } catch (error) {
+          Logger.log(`處理第 ${currentRow} 列資料時發生錯誤：${error.toString()}`);
+          feedbackSheet.getRange(currentRow, statusColumnIndex).setValue(`處理失敗：${error.toString()}`);
+        }
       }
     });
 
-    Logger.log('所有 NPS 資料處理完成');
+    Logger.log('所有需處理的 NPS 資料處理完成');
   } catch (error) {
     Logger.log('處理 NPS 資料時發生錯誤：' + error.toString());
     throw error;

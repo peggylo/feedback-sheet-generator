@@ -13,6 +13,7 @@ A Google Apps Script project that helps process and analyze participant feedback
    - Calculates NPS for each speaker
    - Generates personalized feedback messages
    - Updates processing status automatically
+   - Only processes rows with empty status (optimization)
 
 3. **Duplicate Feedback Detection**
    - Identifies duplicate feedback entries
@@ -22,7 +23,7 @@ A Google Apps Script project that helps process and analyze participant feedback
 ## How to Use
 
 1. Run `executeCreateFeedbackSheets()` to generate individual feedback sheets
-2. Run `executeNPSProcess()` to process NPS data
+2. Run `executeNPSProcess()` to process NPS data (only processes rows with empty status)
 3. Run `executeCheckDuplicateFeedback()` to check for duplicate feedback
 
 ---
@@ -42,6 +43,7 @@ A Google Apps Script project that helps process and analyze participant feedback
    - 計算每位講者的 NPS
    - 產生個人化的回饋訊息
    - 自動更新處理狀態
+   - 只處理狀態欄位為空白的資料列（效能優化）
 
 3. **重複回饋檢查**
    - 識別重複的回饋內容
@@ -51,6 +53,6 @@ A Google Apps Script project that helps process and analyze participant feedback
 ## 使用方式
 
 1. 執行 `executeCreateFeedbackSheets()` 以產生個別回饋表
-2. 執行 `executeNPSProcess()` 以處理 NPS 資料
+2. 執行 `executeNPSProcess()` 以處理 NPS 資料（只處理狀態欄位為空白的資料列）
 3. 執行 `executeCheckDuplicateFeedback()` 以檢查重複回饋
 
