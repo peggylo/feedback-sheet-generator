@@ -68,11 +68,10 @@ function processOneNPSData(feedbackSheet, npsTemplateSheet, rowData, row, column
   const speakerName = rowData[0];  // A 欄
   const speakerSpreadsheetUrl = rowData[1];  // B 欄
   
-  // 取得各項數據
+  // 修改計算方式
   const promotersCount = rowData[columnIndices.max - 1] + 
                         rowData[columnIndices.learnedLots - 1];
-  const detractorsCount = rowData[columnIndices.normal - 1] + 
-                         rowData[columnIndices.noLearn - 1];
+  const detractorsCount = rowData[columnIndices.noLearn - 1]; // 只計算"沒有學到新東西"
   const total = rowData[columnIndices.total - 1];
   
   // 計算百分比
@@ -86,7 +85,11 @@ function processOneNPSData(feedbackSheet, npsTemplateSheet, rowData, row, column
   // 比對計算出的 NPS 和 feedback sheet 中的 NPS
   let status = '';
   if (npsScore === feedbackNPS) {
-    status = 'done';
+    if (npsScore >= 60) {
+      status = 'done';
+    } else {
+      status = 'done (NPS < 60，不建立回饋表)';
+    }
   } else {
     status = `計算值(${npsScore}) 與 表格值(${feedbackNPS}) 不符`;
   }
@@ -97,26 +100,26 @@ function processOneNPSData(feedbackSheet, npsTemplateSheet, rowData, row, column
   // 開啟講者的 spreadsheet
   const speakerSS = SpreadsheetApp.openByUrl(speakerSpreadsheetUrl);
   
-  // 檢查是否已存在 NPS sheet，如果有就刪除
+  // 檢查是否已存在 NPS sheet
   const existingSheet = speakerSS.getSheetByName("NPS");
   if (existingSheet) {
     speakerSS.deleteSheet(existingSheet);
   }
   
-  // 複製 NPS sheet
-  const newSheet = npsTemplateSheet.copyTo(speakerSS);
-  newSheet.setName("NPS");
+  // 只有 NPS >= 60 才建立新的 NPS sheet
+  if (npsScore >= 60) {
+    // 複製 NPS sheet
+    const newSheet = npsTemplateSheet.copyTo(speakerSS);
+    newSheet.setName("NPS");
+    
+    // 填入 NPS 值
+    newSheet.getRange("A2").setValue(npsScore);
+    
+    // 填入回饋文字
+    const messageTemplate = `根據 AI DAY 參加者回饋，您的聽眾中高度推薦與認同者占 ${promotersPercent}%，NPS 為：${promotersPercent}% − ${detractorsPercent}% = ${npsScore}。多數參加者對您的分享推薦度極高，從 NPS 來看您的內容對參加者具有高度價值，真心感謝！\n\n（也說明，NPS 對主辦單位來說並不是在評價講者，比較是在理解聽眾需求、他們的疑問或期待有無被解決；衷心謝謝您準備了第一線老師們需要的內容！🙏）`;
+    
+    newSheet.getRange("A6").setValue(messageTemplate);
+  }
   
-  // 填入 NPS 值
-  newSheet.getRange("A2").setValue(npsScore);
-  
-  // 根據 NPS 分數選擇文字模板
-  const messageTemplate = npsScore >= 50 ? 
-    `根據 AI DAY 參加者回饋，您的聽眾中高度推薦者占 ${promotersPercent}%；改進需求者占 ${detractorsPercent}%，NPS 為：${promotersPercent}% − ${detractorsPercent}% = ${npsScore}。多數參加者對您的分享推薦度極高，從 NPS 來看您的內容對參加者具有高度價值，真心感謝！\n\n（也說明，NPS 對主辦單位來說並不是在評價講者，比較是在理解聽眾需求、他們的疑問或期待有無被解決；衷心謝謝老師準備了第一線老師們需要的內容！🙏）` :
-    `根據 AI DAY 參加者回饋，您的聽眾中高度推薦者占 ${promotersPercent}%；改進需求者占 ${detractorsPercent}%，NPS 為：${promotersPercent}% − ${detractorsPercent}% = ${npsScore}。多數參加者皆推薦您的分享，從 NPS 來看您的內容對參加者很有價值，真心感謝！\n\n（也說明，NPS 對主辦單位來說並不是在評價講者，比較是在理解聽眾需求、他們的疑問或期待有無被解決；衷心謝謝老師準備了第一線老師們需要的內容！🙏）`;
-  
-  // 填入回饋文字
-  newSheet.getRange("A6").setValue(messageTemplate);
-  
-  Logger.log(`已完成處理 ${speakerName} 的 NPS 資料，狀態：${status}`);
+  Logger.log(`已完成處理 ${speakerName} 的 NPS 資料，分數：${npsScore}，狀態：${status}`);
 } 
