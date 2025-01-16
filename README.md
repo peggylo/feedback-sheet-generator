@@ -20,11 +20,17 @@ A Google Apps Script project that helps process and analyze participant feedback
    - Reports duplicate locations by row numbers
    - Processes all speakers' feedback sheets automatically
 
+4. **Spreadsheet Permission Setting**
+   - Sets viewer permissions for speaker spreadsheets
+   - Supports multiple email addresses (semicolon separated)
+   - Processes only rows with empty email check status
+
 ## How to Use
 
 1. Run `executeCreateFeedbackSheets()` to generate individual feedback sheets
 2. Run `executeNPSProcess()` to process NPS data (only processes rows with empty status)
 3. Run `executeCheckDuplicateFeedback()` to check for duplicate feedback
+4. Run `executeSetPermissions()` to set viewer permissions for spreadsheets
 
 ---
 
@@ -50,9 +56,15 @@ A Google Apps Script project that helps process and analyze participant feedback
    - 以列數標示重複位置
    - 自動處理所有講者的回饋表
 
+4. **試算表權限設定**
+   - 設定講者試算表的瀏覽權限
+   - 支援多個 email（以分號分隔）
+   - 只處理 email check 欄位為空白的資料
+
 ## 使用方式
 
 1. 執行 `executeCreateFeedbackSheets()` 以產生個別回饋表
 2. 執行 `executeNPSProcess()` 以處理 NPS 資料（只處理狀態欄位為空白的資料列）
 3. 執行 `executeCheckDuplicateFeedback()` 以檢查重複回饋
+4. 執行 `executeSetPermissions()` 以設定試算表權限
 
